@@ -1,0 +1,66 @@
+﻿@model PRINGUP_Proj.Models.Izvjestaj
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Izvjestaj</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Opis)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Opis)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Date_Posted)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Date_Posted)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Time_Posted)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Time_Posted)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Date_Edited)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Date_Edited)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Time_Edited)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Time_Edited)
+        </dd>
+
+        <dt>
+            Posted by
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Username)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
