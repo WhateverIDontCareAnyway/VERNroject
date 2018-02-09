@@ -26,5 +26,7 @@ namespace PRINGUP_Proj.Models
         }
     
         public virtual DbSet<Izvjestaj> Izvjestajs { get; set; }
+
+        public System.Data.Entity.DbSet<PRINGUP_Proj.Models.Lists> Lists { get; set; }
     }
 }

@@ -10,6 +10,9 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using PRINGUP_Proj.Models;
 using PRINGUP_Proj.CustomFilters;
+using System.Net;
+using Microsoft.AspNet.Identity.EntityFramework;
+using System.Collections.Generic;
 
 namespace PRINGUP_Proj.Controllers
 {
@@ -30,6 +33,8 @@ namespace PRINGUP_Proj.Controllers
             UserManager = userManager;
             SignInManager = signInManager;
         }
+
+       
 
         public ApplicationSignInManager SignInManager
         {
@@ -54,6 +59,7 @@ namespace PRINGUP_Proj.Controllers
                 _userManager = value;
             }
         }
+
 
         //
         // GET: /Account/Login
@@ -146,6 +152,7 @@ namespace PRINGUP_Proj.Controllers
             return View();
         }
 
+        
         //
         // POST: /Account/Register
         [HttpPost]
@@ -161,13 +168,23 @@ namespace PRINGUP_Proj.Controllers
                 {
 
                     //Assign Role to user Here 
+                    if(model.Name == null || model.Name != "Admin")
+                    {
+                        model.Name = "User";
+                    }                  
                     await this.UserManager.AddToRoleAsync(user.Id, model.Name);
                     //Ends Here
+                    
+                    if (this.User.IsInRole("Admin"))
+                    {
+                        return RedirectToAction("Index", "Home");
+                    }
+                    else
+                    {
+                        await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
 
-
-                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-
-                    return RedirectToAction("Index", "Home");
+                        return RedirectToAction("Index", "Home");
+                    }                  
                 }
                 AddErrors(result);
             }
@@ -175,6 +192,46 @@ namespace PRINGUP_Proj.Controllers
             // If we got this far, something failed, redisplay form
             return View(model);
         }
+
+
+
+
+        public ActionResult Index(string sortOrder, string searchString)
+        {
+            var userRoles = new List<RolesViewModel>();
+            var context = new ApplicationDbContext();
+            var userStore = new UserStore<ApplicationUser>(context);
+            var userManager = new UserManager<ApplicationUser>(userStore);
+
+            //Get all the usernames
+            foreach (var user in userStore.Users)
+            {
+                var r = new RolesViewModel
+                {
+                    Email = user.UserName
+                };
+                userRoles.Add(r);
+            }
+            //Get all the Roles for our users
+            foreach (var user in userRoles)
+            {
+                user.RoleNames = userManager.GetRoles(userStore.Users.First(s => s.UserName == user.Email).Id);
+            }
+
+            return View(userRoles);
+        }
+
+        public ActionResult EditUser()
+        {
+            ViewBag.Name = new SelectList(context.Roles.ToList(), "Name", "Name");
+            return View();
+        }
+
+        //[HttpPost]
+        //public ActionResult EditUser ()
+        //{          
+        //    return View();                                      
+        //}
 
         //
         // GET: /Account/ConfirmEmail
@@ -389,6 +446,7 @@ namespace PRINGUP_Proj.Controllers
             return View(model);
         }
 
+     
         //
         // POST: /Account/LogOff
         [HttpPost]

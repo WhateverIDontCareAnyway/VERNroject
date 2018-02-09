@@ -12,11 +12,35 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Opis)
+            @Html.DisplayNameFor(model => model.Name)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Opis)
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Members_present)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Members_present)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Location)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Location)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Duration)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Duration)
         </dd>
 
         <dt>
@@ -25,15 +49,7 @@
 
         <dd>
             @Html.DisplayFor(model => model.Date_Posted)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Time_Posted)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Time_Posted)
-        </dd>
+        </dd>       
 
         <dt>
             @Html.DisplayNameFor(model => model.Date_Edited)
@@ -43,13 +59,7 @@
             @Html.DisplayFor(model => model.Date_Edited)
         </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Time_Edited)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Time_Edited)
-        </dd>
+        
 
     </dl>
 
@@ -58,7 +68,15 @@
 
         <div class="form-actions no-color">
             <input type="submit" value="Delete" class="btn btn-default" /> |
-            @Html.ActionLink("Back to List", "Index")
+            @if (this.User.IsInRole("Admin"))
+            {
+                @Html.ActionLink("Back to List", "Index")
+            }
+            else
+            {
+                @Html.ActionLink("Back to List", "IndexUser")
+            }
+            
         </div>
     }
 </div>

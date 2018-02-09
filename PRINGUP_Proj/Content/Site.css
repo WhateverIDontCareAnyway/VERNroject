@@ -20,5 +20,24 @@
 input,
 select,
 textarea {
-    max-width: 280px;
+    max-width: 580px;
+}
+
+.contentKlasa 
+{
+    width:500px;
+    height: 200px;
+    max-width: 60%;
+    max-height: 40%;
+}
+
+.textarea {
+    height: initial;
+    width: initial;
+    width: 800px;
+    min-height: 250px;
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    color: #444;
+    padding: 5px;
 }

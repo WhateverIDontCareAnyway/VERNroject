@@ -26,5 +26,6 @@ namespace PRINGUP_Proj.Controllers
 
             return View();
         }
+        
     }
 }

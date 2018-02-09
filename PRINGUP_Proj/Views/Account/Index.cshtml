@@ -1,0 +1,35 @@
+﻿    @using PRINGUP_Proj.Models
+    @model IEnumerable<RolesViewModel>
+
+    <h4>Users</h4>
+
+    <table class="table">
+        <tr>
+            <th>User</th>
+            <th>Role</th>
+            <th></th>
+        </tr>
+
+        @foreach (var user in Model.ToList())
+        {
+            <tr>
+                <td>
+                    @user.Email
+                </td>
+                <td>
+                    @foreach (var role in user.RoleNames)
+                    {
+                    <div> @role </div>
+                    }
+                </td>
+                <td>
+                    @*@Html.ActionLink("Edit", "EditUser", new { email = user.Email }) |
+                    @Html.ActionLink("Delete", "Delete")*@
+                </td>
+            </tr>
+        }
+    </table>
+
+
+
+

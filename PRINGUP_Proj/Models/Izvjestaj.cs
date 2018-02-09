@@ -15,11 +15,13 @@ namespace PRINGUP_Proj.Models
     public partial class Izvjestaj
     {
         public int ID { get; set; }
-        public string Opis { get; set; }
+        public string Name { get; set; }
+        public string Content { get; set; }
+        public string Members_present { get; set; }
+        public string Location { get; set; }
+        public string Duration { get; set; }
         public string Date_Posted { get; set; }
-        public string Time_Posted { get; set; }
         public string Date_Edited { get; set; }
-        public string Time_Edited { get; set; }
         public string User_ID { get; set; }
         public string Username { get; set; }
     }

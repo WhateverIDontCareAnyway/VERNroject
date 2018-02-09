@@ -6,50 +6,49 @@
 
 <h2>Index</h2>
 
+
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
+
+@using (Html.BeginForm())
+{
+    <p>
+        Report including: @Html.TextBox("SearchString")
+        <input type="submit" value="Search" />
+    </p>
+}
+
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Opis)
+            @Html.ActionLink("Name", "Index", new { sortOrder = ViewBag.NameSortParm })
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Date_Posted)
-        </th>
+            @Html.ActionLink("Date", "Index", new { sortOrder = ViewBag.DateSortParm })
+        </th>      
         <th>
-            @Html.DisplayNameFor(model => model.Time_Posted)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Date_Edited)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Time_Edited)
-        </th>
+            @Html.ActionLink("Created by", "Index", new { sortOrder = ViewBag.UserSortParm })
+        </th>      
         <th></th>
     </tr>
 
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.Opis)
+            @Html.DisplayFor(modelItem => item.Name)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Date_Posted)
-        </td>
+        </td>      
         <td>
-            @Html.DisplayFor(modelItem => item.Time_Posted)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Date_Edited)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Time_Edited)
-        </td>
+            @Html.DisplayFor(modelItem => item.Username)
+        </td>       
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
             @Html.ActionLink("Details", "Details", new { id=item.ID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.ID })
+            @Html.ActionLink("View as PDF", "GeneratePDF", new { id = item.ID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.ID })           
         </td>
     </tr>
 }

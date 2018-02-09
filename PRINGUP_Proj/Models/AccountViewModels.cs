@@ -111,4 +111,18 @@ namespace PRINGUP_Proj.Models
         [Display(Name = "Email")]
         public string Email { get; set; }
     }
+
+
+    public class UserViewModel
+    {
+        public string Email { get; set; }
+        public string Role { get; set; }
+        public IEnumerable<string> Name { get; set; }
+    }
+
+    public class RolesViewModel
+    {
+        public IEnumerable<string> RoleNames { get; set; }
+        public string Email { get; set; }
+    }
 }

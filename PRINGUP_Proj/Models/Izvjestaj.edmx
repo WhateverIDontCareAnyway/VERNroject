@@ -10,11 +10,13 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Opis" Type="nvarchar(max)" />
+          <Property Name="Name" Type="nvarchar(max)" />
+          <Property Name="Content" Type="nvarchar(max)" />
+          <Property Name="Members_present" Type="nvarchar(max)" />
+          <Property Name="Location" Type="nvarchar" MaxLength="50" />
+          <Property Name="Duration" Type="nvarchar" MaxLength="50" />
           <Property Name="Date_Posted" Type="nvarchar" MaxLength="30" />
-          <Property Name="Time_Posted" Type="nvarchar" MaxLength="50" />
           <Property Name="Date_Edited" Type="nvarchar" MaxLength="30" />
-          <Property Name="Time_Edited" Type="nvarchar" MaxLength="50" />
           <Property Name="User_ID" Type="nvarchar" MaxLength="50" />
           <Property Name="Username" Type="nvarchar" MaxLength="50" />
         </EntityType>
@@ -25,22 +27,24 @@
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="IzvjestajiModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="IzvjestajiEntities1" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Izvjestajs" EntityType="IzvjestajiModel.Izvjestaj" />
+        </EntityContainer>
         <EntityType Name="Izvjestaj">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Opis" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Content" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Members_present" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Location" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Duration" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Date_Posted" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Name="Time_Posted" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Date_Edited" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Name="Time_Edited" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="User_ID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Username" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
-        <EntityContainer Name="IzvjestajiEntities1" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Izvjestajs" EntityType="Self.Izvjestaj" />
-        </EntityContainer>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -51,13 +55,15 @@
             <EntityTypeMapping TypeName="IzvjestajiModel.Izvjestaj">
               <MappingFragment StoreEntitySet="Izvjestaj">
                 <ScalarProperty Name="Username" ColumnName="Username" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="Opis" ColumnName="Opis" />
-                <ScalarProperty Name="Date_Posted" ColumnName="Date_Posted" />
-                <ScalarProperty Name="Time_Posted" ColumnName="Time_Posted" />
-                <ScalarProperty Name="Date_Edited" ColumnName="Date_Edited" />
-                <ScalarProperty Name="Time_Edited" ColumnName="Time_Edited" />
                 <ScalarProperty Name="User_ID" ColumnName="User_ID" />
+                <ScalarProperty Name="Date_Edited" ColumnName="Date_Edited" />
+                <ScalarProperty Name="Date_Posted" ColumnName="Date_Posted" />
+                <ScalarProperty Name="Duration" ColumnName="Duration" />
+                <ScalarProperty Name="Location" ColumnName="Location" />
+                <ScalarProperty Name="Members_present" ColumnName="Members_present" />
+                <ScalarProperty Name="Content" ColumnName="Content" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -1,0 +1,28 @@
+﻿@using PRINGUP_Proj.Models
+@model IEnumerable<UserViewModel>
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Edit</h2>
+
+@using (Html.BeginForm("EditUser", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+<div class="form-group">
+    @Html.Label("Select New User Type", new { @class = "col-md-2 control-label" })
+    <div class="col-md-10">
+        @Html.DropDownList("Name")
+    </div>
+</div>
+
+
+<div class="col-md-offset-2 col-md-10">
+    <!--Ends Here-->
+    <input type="submit" class="btn btn-default" value="Apply" />
+</div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

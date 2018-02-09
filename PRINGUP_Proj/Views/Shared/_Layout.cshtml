@@ -17,16 +17,22 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("Reporter", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">              
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
                     <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                    <li>@Html.ActionLink("Role", "Index", "Role")</li>
-                    <li>@Html.ActionLink("Moji izvjestaji", "IndexUser", "Izvjestajs")</li>
-                    <li>@Html.ActionLink("Svi izvjestaji", "Index", "Izvjestajs")</li>
+                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>                    
+                    <li>@Html.ActionLink("My reports", "IndexUser", "Izvjestajs")</li>
+                    @if (this.User.IsInRole("Admin"))
+                    {
+                        <li>@Html.ActionLink("All reports", "Index", "Izvjestajs")</li>
+                        <li>@Html.ActionLink("Role", "Index", "Role")</li>
+                        <li>@Html.ActionLink("User list","Index","Account")</li>
+                        <li>@Html.ActionLink("Register new user","Register","Account")</li>
+                    }                    
+                    
 
                 </ul>
                 @Html.Partial("_LoginPartial")
@@ -37,7 +43,9 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+            <p>&copy; @DateTime.Now.Year - Reporter(VERN' Project). All rights reserved.</p>
+            <p> Users online: <b>@HttpContext.Current.Application["BrojPosjetitelja"]</b> </p>
+            <p> <b>@HttpContext.Current.Session["BrojPosjecenihStranicaTrenutnogKorisnika"]</b> actions performed in this session</p>
         </footer>
     </div>
 

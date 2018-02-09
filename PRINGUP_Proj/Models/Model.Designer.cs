@@ -1,4 +1,4 @@
-﻿// T4 code generation is enabled for model 'c:\users\valerijan\documents\visual studio 2017\Projects\PRINGUP_Proj\PRINGUP_Proj\Models\Model.edmx'. 
+﻿// T4 code generation is enabled for model 'D:\5. SEM\PRINGUP\Projekt\PRINGUP_Proj\PRINGUP_Proj\Models\Model.edmx'. 
 // To enable legacy code generation, change the value of the 'Code Generation Strategy' designer
 // property to 'Legacy ObjectContext'. This property is available in the Properties Window when the model
 // is open in the designer.

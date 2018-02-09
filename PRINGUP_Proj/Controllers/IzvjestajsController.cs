@@ -9,6 +9,8 @@ using System.Web.Mvc;
 using PRINGUP_Proj.Models;
 using PRINGUP_Proj.CustomFilters;
 using Microsoft.AspNet.Identity;
+using Rotativa;
+
 
 namespace PRINGUP_Proj.Controllers
 {
@@ -18,14 +20,50 @@ namespace PRINGUP_Proj.Controllers
 
         // GET: Izvjestajs
         [AuthLog(Roles = "Admin")]
-        public ActionResult Index()
+        public ActionResult Index(string sortOrder, string searchString)
         {
-            return View(db.Izvjestajs.ToList());
+            ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewBag.DateSortParm = sortOrder == "Date" ? "date_desc" : "Date";
+            ViewBag.UserSortParm = sortOrder == "User" ? "user_desc" : "User";
+            var izvjestajs = from i in db.Izvjestajs
+                             select i;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                izvjestajs = izvjestajs.Where(s => s.Name.Contains(searchString)
+                                       || s.Username.Contains(searchString)
+                                       || s.Date_Posted.Contains(searchString));
+            }
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    izvjestajs = izvjestajs.OrderByDescending(i => i.Name);
+                    break;
+                case "Date":
+                    izvjestajs = izvjestajs.OrderBy(i => i.Date_Posted);
+                    break;
+                case "date_desc":
+                    izvjestajs = izvjestajs.OrderByDescending(i => i.Date_Posted);
+                    break;
+                case "User":
+                    izvjestajs = izvjestajs.OrderBy(i => i.Username);
+                    break;
+                case "user_desc":
+                    izvjestajs = izvjestajs.OrderByDescending(i => i.Username);
+                    break;
+                default:
+                    izvjestajs = izvjestajs.OrderBy(i => i.Name);
+                    break;
+            }
+
+            return View(izvjestajs.ToList());
         }
 
         [Authorize]
-        public ActionResult IndexUser()
-        {         
+        public ActionResult IndexUser(string sortOrder, string searchString)
+        {
+            
+
             var user = User.Identity.GetUserId();
             var items = new List<Izvjestaj>();
 
@@ -35,8 +73,47 @@ namespace PRINGUP_Proj.Controllers
                 {
                     items.Add(item);
                 }
-            }           
-            return View(items);
+            }
+
+            ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewBag.DateSortParm = sortOrder == "Date" ? "date_desc" : "Date";
+            ViewBag.DateEditSortParm = sortOrder == "DateEdit" ? "dateEdit_desc" : "DateEdit";
+            var izvjestajs = from i in items
+                             select i;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                izvjestajs = izvjestajs.Where(s => s.Name.Contains(searchString)
+                                       || s.Date_Posted.Contains(searchString));
+            }
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    izvjestajs = izvjestajs.OrderByDescending(i => i.Name);
+                    break;
+                case "Date":
+                    izvjestajs = izvjestajs.OrderBy(i => i.Date_Posted);
+                    break;
+                case "date_desc":
+                    izvjestajs = izvjestajs.OrderByDescending(i => i.Date_Posted);
+                    break;
+                case "User":
+                    izvjestajs = izvjestajs.OrderBy(i => i.Username);
+                    break;
+                case "user_desc":
+                    izvjestajs = izvjestajs.OrderByDescending(i => i.Username);
+                    break;
+                case "dateEdit":
+                    izvjestajs = izvjestajs.OrderBy(i => i.Date_Edited);
+                    break;
+                case "dateEdit_desc":
+                    izvjestajs = izvjestajs.OrderByDescending(i => i.Date_Edited);
+                    break;
+                default:
+                    izvjestajs = izvjestajs.OrderBy(i => i.Name);
+                    break;
+            }
+            return View(izvjestajs.ToList());
         }
 
         // GET: Izvjestajs/Details/5
@@ -54,6 +131,20 @@ namespace PRINGUP_Proj.Controllers
             return View(izvjestaj);
         }
 
+        public ActionResult GeneratePDF(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Izvjestaj izvjestaj = db.Izvjestajs.Find(id);
+            if (izvjestaj == null)
+            {
+                return HttpNotFound();
+            }
+            return new Rotativa.MVC.ViewAsPdf("GeneratePDF",izvjestaj);           
+        }
+
         // GET: Izvjestajs/Create
         public ActionResult Create()
         {
@@ -65,7 +156,7 @@ namespace PRINGUP_Proj.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,Opis,Date_Posted,Time_Posted,Date_Edited,Time_Edited")] Izvjestaj izvjestaj)
+        public ActionResult Create([Bind(Include = "ID,Name,Content,Members_present,Location,Duration,Date_Posted,Date_Edited")] Izvjestaj izvjestaj)
         {
             if (ModelState.IsValid)
             {
@@ -74,8 +165,7 @@ namespace PRINGUP_Proj.Controllers
                 var creatorUserName = User.Identity.Name;
                 izvjestaj.Username = creatorUserName;
                 
-                izvjestaj.Date_Posted = DateTime.Now.ToString("M/dd/yyyy");
-                izvjestaj.Time_Posted = DateTime.Now.ToString("h:mm:ss tt");
+                izvjestaj.Date_Posted = DateTime.Now.ToString("dd/M/yyyy - h:mm:ss tt");
                 db.Izvjestajs.Add(izvjestaj);
                 db.SaveChanges();
                 return RedirectToAction("IndexUser");
@@ -104,15 +194,21 @@ namespace PRINGUP_Proj.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,Opis,Date_Posted,Time_Posted,Date_Edited,Time_Edited")] Izvjestaj izvjestaj)
+        public ActionResult Edit([Bind(Include = "ID,Name,Content,Members_present,Location,Duration,Date_Posted,Date_Edited,Username,User_ID")] Izvjestaj izvjestaj)
         {
             if (ModelState.IsValid)
             {
                 db.Entry(izvjestaj).State = EntityState.Modified;
-                izvjestaj.Date_Edited = DateTime.Now.ToString("M/dd/yyyy");
-                izvjestaj.Time_Edited = DateTime.Now.ToString("h:mm:ss tt");
+                izvjestaj.Date_Edited = DateTime.Now.ToString("dd/M/yyyy - h:mm:ss tt");        
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                if (this.User.IsInRole("Admin"))
+                {
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    return RedirectToAction("IndexUser");
+                }
             }
             return View(izvjestaj);
         }
@@ -140,7 +236,14 @@ namespace PRINGUP_Proj.Controllers
             Izvjestaj izvjestaj = db.Izvjestajs.Find(id);
             db.Izvjestajs.Remove(izvjestaj);
             db.SaveChanges();
-            return RedirectToAction("Index");
+            if (this.User.IsInRole("Admin"))
+            {
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return RedirectToAction("IndexUser");
+            }
         }
 
         protected override void Dispose(bool disposing)
@@ -151,5 +254,8 @@ namespace PRINGUP_Proj.Controllers
             }
             base.Dispose(disposing);
         }
+
+    
+
     }
 }
