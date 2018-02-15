@@ -177,6 +177,8 @@ namespace PRINGUP_Proj.Controllers
                     
                     if (this.User.IsInRole("Admin"))
                     {
+                        await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+
                         return RedirectToAction("Index", "Home");
                     }
                     else
@@ -186,9 +188,10 @@ namespace PRINGUP_Proj.Controllers
                         return RedirectToAction("Index", "Home");
                     }                  
                 }
+                ViewBag.Name = new SelectList(context.Roles.ToList(), "Name", "Name");
                 AddErrors(result);
             }
-
+          
             // If we got this far, something failed, redisplay form
             return View(model);
         }
